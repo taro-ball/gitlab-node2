@@ -1,5 +1,9 @@
 # Reference: https://www.exclamationlabs.com/blog/continuous-deployment-to-npm-using-gitlab-ci/
 
+.gitlab_docker:
+  tags:
+    - gitlab-org-docker
+
 # GitLab uses docker in the background, so we need to specify the 
 # image versions. This is useful because we're freely to use
 # multiple node versions to work with it. They come from the docker
@@ -25,6 +29,8 @@ stages:
   - staging
 
 Build:
+  extends:
+    - .gitlab_docker
   stage: build
   tags:
     - node
@@ -32,6 +38,8 @@ Build:
     - npm install
 
 Deploy to Staging:
+  extends:
+    - .gitlab_docker
   stage: staging
   tags:
     - node
