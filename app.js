@@ -4,9 +4,9 @@ var app = express()
 
 //Define request response in root URL (/)
 app.get('/', function (req, res) {
-  var url = req.url;
-  res.send('Hello World')
-  console.log('Received request for URL: ' + request.url)
+  var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
+  res.send('Hello World\n'+fullUrl);
+  console.log('Received request for URL: ' + fullUrl);
 })
 
 //Launch listening server on port 8080
