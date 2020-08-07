@@ -1,9 +1,5 @@
 # Reference: https://www.exclamationlabs.com/blog/continuous-deployment-to-npm-using-gitlab-ci/
 
-.gitlab_docker:
-  tags:
-    - git
-
 # GitLab uses docker in the background, so we need to specify the 
 # image versions. This is useful because we're freely to use
 # multiple node versions to work with it. They come from the docker
@@ -12,15 +8,15 @@
 image: node:9.4.0
 
 # And to cache them as well.
-cache:
-  paths:
-    - node_modules/
+#cache:
+#  paths:
+#    - node_modules/
 
 # We tell GitLab to install all the packages
 # before running anything.
 # Docker images come with yarn preinstalled
-before_script:  
-  - apt-get update -qq && apt-get install
+#before_script:  
+#  - apt-get update -qq && apt-get install
 
 # You specify the stages. Those are the steps that GitLab will go through 
 # Order matters. 
@@ -29,8 +25,7 @@ stages:
   - staging
 
 Build:
-  extends:
-    - .gitlab_docker
+
   stage: build
   tags:
     - docker
@@ -38,8 +33,9 @@ Build:
     - npm install
 
 Deploy to Staging:
-  extends:
-    - .gitlab_docker
+  artifacts:
+    paths:
+      - ./
   stage: staging
   tags:
     - docker
@@ -52,7 +48,10 @@ Deploy to Staging:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script:     
-    - ssh -p 443 ec2-user@$STAGING_SERVER "cd ./staging && echo $CI_COMMIT_REF_NAME && git stash  && git checkout $CI_COMMIT_REF_NAME && git stash && git pull  && sudo npm start"  
+    - ssh -p443 ec2-user@$STAGING_SERVER "mkdir staging/_tmp"
+    - scp -p443 -r ./* ec2-user@$STAGING_SERVER:staging/_tmp
+    - ssh -p443 ec2-user@$STAGING_SERVER "mv staging/live staging/_old && mv staging/_tmp staging/live"
+    - ssh -p443 ec2-user@$STAGING_SERVER "rm -rf staging/_old  && sudo npm start"
   environment:     
     name: staging     
     # Exposes a button that when clicked take you to the defined URL:
