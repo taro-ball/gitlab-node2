@@ -2,7 +2,7 @@
 
 .gitlab_docker:
   tags:
-    - gitlab-org-docker
+    - git
 
 # GitLab uses docker in the background, so we need to specify the 
 # image versions. This is useful because we're freely to use
@@ -33,7 +33,7 @@ Build:
     - .gitlab_docker
   stage: build
   tags:
-    - gitlab-org-docker
+    - docker
   script:
     - npm install
 
@@ -42,7 +42,7 @@ Deploy to Staging:
     - .gitlab_docker
   stage: staging
   tags:
-    - gitlab-org-docker
+    - docker
   before_script:
     # Generates to connect to the AWS unit the SSH key.
     - mkdir -p ~/.ssh
