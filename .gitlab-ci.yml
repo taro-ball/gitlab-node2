@@ -52,8 +52,8 @@ Deploy to Staging:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script:     
-    - bash ./gitlab-deploy/.gitlab-deploy.staging.sh   
+    - ssh -p 443 ec2-user@$STAGING_SERVER "cd ./staging && git stash && git checkout $CI_BUILD_REF_NAME && git stash && git pull  && sudo npm start"  
   environment:     
     name: staging     
     # Exposes a button that when clicked take you to the defined URL:
-    url: http://ec2-13-59-173-91.us-east-2.compute.amazonaws.com:3001   
+    url: http://$STAGING_SERVER:8080/ 
