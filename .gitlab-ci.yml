@@ -48,7 +48,7 @@ Deploy to Staging:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script:     
-    - ssh -p443 ec2-user@$STAGING_SERVER "mkdir staging/_tmp"
+    - ssh -p443 ec2-user@$STAGING_SERVER "mkdir staging/_tmp && ls -la"
     - scp -P443 -r ./* ec2-user@$STAGING_SERVER:staging/_tmp
     - ssh -p443 ec2-user@$STAGING_SERVER "mv staging/live staging/_old && mv staging/_tmp staging/live"
     - ssh -p443 ec2-user@$STAGING_SERVER "rm -rf staging/_old  && sudo npm start"
