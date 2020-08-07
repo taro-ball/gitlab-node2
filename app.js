@@ -5,7 +5,7 @@ var app = express()
 //Define request response in root URL (/)
 app.get('/', function (req, res) {
   var fullUrl = req.protocol + '://' + req.get('host') + req.originalUrl;
-  res.send('Hello World\n'+fullUrl);
+  res.send('Hello Mates!\n'+fullUrl);
   console.log('Received request for URL: ' + fullUrl);
 })
 
