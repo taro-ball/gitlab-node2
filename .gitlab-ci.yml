@@ -33,7 +33,7 @@ Build:
     - .gitlab_docker
   stage: build
   tags:
-    - node1
+    - gitlab-org-docker
   script:
     - npm install
 
@@ -42,7 +42,7 @@ Deploy to Staging:
     - .gitlab_docker
   stage: staging
   tags:
-    - node
+    - gitlab-org-docker
   before_script:
     # Generates to connect to the AWS unit the SSH key.
     - mkdir -p ~/.ssh
