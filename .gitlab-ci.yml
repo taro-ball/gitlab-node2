@@ -24,14 +24,6 @@ stages:
 #  - build
   - staging
 
-Build:
-
-  stage: build
-  tags:
-    - docker
-  script:
-    - npm install
-
 Deploy to Staging:
   artifacts:
     paths:
