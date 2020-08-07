@@ -21,7 +21,7 @@ image: node:9.4.0
 # You specify the stages. Those are the steps that GitLab will go through 
 # Order matters. 
 stages:
-  - build
+#  - build
   - staging
 
 Build:
@@ -47,11 +47,12 @@ Deploy to Staging:
     # that it's too unprotected.
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
-  script:     
+  script: 
+    - ls -la    
     - ssh -p443 ec2-user@$STAGING_SERVER "mkdir staging/_tmp && ls -la"
     - scp -P443 -r ./* ec2-user@$STAGING_SERVER:staging/_tmp
     - ssh -p443 ec2-user@$STAGING_SERVER "mv staging/live staging/_old && mv staging/_tmp staging/live"
-    - ssh -p443 ec2-user@$STAGING_SERVER "rm -rf staging/_old  && npm start"
+    - ssh -p443 ec2-user@$STAGING_SERVER "rm -rf staging/_old  && cd staging/live && npm install && npm start"
   environment:     
     name: staging     
     # Exposes a button that when clicked take you to the defined URL:
