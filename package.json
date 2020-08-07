@@ -4,7 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start:staging": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
   },
   "author": "",
   "license": "ISC",
