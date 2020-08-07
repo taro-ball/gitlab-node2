@@ -33,7 +33,7 @@ Build:
     - .gitlab_docker
   stage: build
   tags:
-    - node
+    - node1
   script:
     - npm install
 
