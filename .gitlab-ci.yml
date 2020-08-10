@@ -21,8 +21,23 @@ image: node:9.4.0
 # You specify the stages. Those are the steps that GitLab will go through 
 # Order matters. 
 stages:
-#  - build
+  - build
   - staging
+
+Build:
+  stage: build
+  only:
+    - schedules
+  tags:
+    - docker
+
+  before_script:
+  - docker info
+  script: 
+    - docker build -t my-image dockerfiles/
+    - docker run my-image /script/to/run/tests
+    - docker tag my-image my-registry:5000/my-image
+    - docker push my-registry:5000/my-image
 
 Deploy to Staging:
   artifacts:
