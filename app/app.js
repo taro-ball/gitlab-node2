@@ -4,7 +4,7 @@ var os = require('os')
 var app = express();
 
 const port = process.env.JSPORT || "3000";
-const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！</h1> '
+const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello world!</h1> '
 const butt="</body></html>"
 system_info= 'hostname: '+os.hostname()+" / os: "+os.type()
 
