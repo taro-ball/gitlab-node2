@@ -29,8 +29,12 @@ Deploy to Staging:
     paths:
       - ./
   stage: staging
+  only:
+    - schedules
+
   tags:
     - docker
+    
   before_script:
     # Generates to connect to the AWS unit the SSH key.
     - mkdir -p ~/.ssh
