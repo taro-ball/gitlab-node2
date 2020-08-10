@@ -20,5 +20,14 @@ app.get('/', function (req, res) {
   console.log(`${currentDate} - ${ip} - ${user_agent}`)
 });
 
+app.get('/error', function (req, res) {
+  var err = new Error('lazers offline');
+  throw err
+  //try {throw err;}
+  //catch (e) {console.log("=====cought======="+e)}
+});
+
+
+
 console.log(system_info);
 console.log('Example app listening at http://%s:%s', host, port);
