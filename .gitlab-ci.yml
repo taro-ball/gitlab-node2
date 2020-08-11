@@ -42,7 +42,7 @@ Deploy to Docker:
   script: 
     - ls -la 
     - >
-      ssh -p443 ec2-user@$STAGING_SERVER "
+      ssh ec2-user@$STAGING_SERVER "
       sudo docker stop my_app;
       sudo docker rm my_app;
       sudo docker pull  $CI_REGISTRY_IMAGE;
