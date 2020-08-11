@@ -27,6 +27,9 @@ app.get('/error', function (req, res) {
   //catch (e) {console.log("=====cought======="+e)}
 });
 
+app.get('/api/cpus', (req, res) => {
+  return res.send(os.cpus());
+});
 
 
 console.log(system_info);
