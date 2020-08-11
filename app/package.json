@@ -1,7 +1,7 @@
 {
   "name": "node-test2",
   "version": "1.0.0",
-  "description": "",
+  "description": "my testing node app",
   "main": "app.js",
   "scripts": {
     "test": "mocha",
