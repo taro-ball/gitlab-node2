@@ -10,7 +10,7 @@ stages:
 Build:
   stage: build
   only:
-    - schedules
+    - #schedules
     - master
   tags:
     - docker
