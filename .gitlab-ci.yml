@@ -70,7 +70,7 @@ Deploy to VM:
   script: 
     - ls -la
     # inject job name:
-    - ssh ec2-user@$STAGING_SERVER "sed -i 's/<\/bo/<br>deployd by $CI_JOB_NAME<\/bo/g' app/app.js"
+    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME<\/bo/g" app/app.js
     - ssh ec2-user@$STAGING_SERVER "mkdir staging/_tmp && ls -la"
     - scp -r ./app/* ec2-user@$STAGING_SERVER:staging/_tmp
     - ssh ec2-user@$STAGING_SERVER "mv staging/live staging/_old && mv staging/_tmp staging/live"
