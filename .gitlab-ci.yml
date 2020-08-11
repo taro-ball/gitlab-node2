@@ -1,25 +1,8 @@
-# Reference: https://www.exclamationlabs.com/blog/continuous-deployment-to-npm-using-gitlab-ci/
+image: docker:latest
 
-# GitLab uses docker in the background, so we need to specify the 
-# image versions. This is useful because we're freely to use
-# multiple node versions to work with it. They come from the docker
-# repo.
-# Uses NodeJS V 9.4.0
-image: node:9.4.0
+services:
+  - docker:dind
 
-# And to cache them as well.
-#cache:
-#  paths:
-#    - node_modules/
-
-# We tell GitLab to install all the packages
-# before running anything.
-# Docker images come with yarn preinstalled
-#before_script:  
-#  - apt-get update -qq && apt-get install
-
-# You specify the stages. Those are the steps that GitLab will go through 
-# Order matters. 
 stages:
   - build
   - staging
@@ -28,16 +11,19 @@ Build:
   stage: build
   only:
     - schedules
+    - master
   tags:
     - docker
 
   before_script:
+  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   - docker info
+
   script: 
-    - docker build -t my-image dockerfiles/
-    - docker run my-image /script/to/run/tests
-    - docker tag my-image my-registry:5000/my-image
-    - docker push my-registry:5000/my-image
+    - docker build --pull -t "$CI_REGISTRY_IMAGE" .
+    - #docker run $CI_REGISTRY_IMAGE /script/to/run/tests
+    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY:$CI_REGISTRY_IMAGE
+    - docker push "$CI_REGISTRY_IMAGE"
 
 Deploy to Staging:
   artifacts:
