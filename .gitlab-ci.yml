@@ -5,7 +5,8 @@ services:
 
 stages:
   - build
-  - staging
+  - to_docker
+  - to_vm
 
 Build:
   stage: build
@@ -25,11 +26,26 @@ Build:
 #    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:latest
     - docker push "$CI_REGISTRY_IMAGE"
 
-Deploy to Staging:
+Deploy to Docker:
+  stage: to_docker
+  only:
+    - master
+  tags:
+    - docker
+  before_script:
+    - mkdir -p ~/.ssh
+    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - chmod 600  ~/.ssh/id_rsa
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
+  script: 
+    - ls -la 
+    - ssh -p443 ec2-user@$STAGING_SERVER "sudo docker stop my_app; sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+
+Deploy to VM:
   artifacts:
     paths:
       - ./
-  stage: staging
+  stage: to_vm
   only:
     - schedules
 
