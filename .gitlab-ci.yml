@@ -1,5 +1,4 @@
-services:
-  - docker:dind
+image: docker:latest
 
 stages:
   - build
@@ -7,7 +6,8 @@ stages:
   - to_vm
 
 Build:
-  image: docker:latest
+  services:
+  - docker:dind
   stage: build
   only:
 #    - schedules
@@ -28,7 +28,6 @@ Build:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 Deploy to Docker:
-  image: ubuntu
   stage: to_docker
   only:
     - master
