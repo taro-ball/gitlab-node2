@@ -10,7 +10,7 @@ stages:
 Build:
   stage: build
   only:
-    - #schedules
+#    - schedules
     - master
   tags:
     - docker
@@ -21,7 +21,7 @@ Build:
 
   script: 
     - docker build --pull -t "$CI_REGISTRY_IMAGE" .
-    - #docker run $CI_REGISTRY_IMAGE /script/to/run/tests
+#    - docker run $CI_REGISTRY_IMAGE /script/to/run/tests
     - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY:$CI_REGISTRY_IMAGE
     - docker push "$CI_REGISTRY_IMAGE"
 
