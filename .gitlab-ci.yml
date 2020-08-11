@@ -28,7 +28,7 @@ Build:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 Deploy to Docker:
-  image: alpine
+  image: ubuntu
   stage: to_docker
   only:
     - master
@@ -53,8 +53,8 @@ Deploy to VM:
     paths:
       - ./
   stage: to_vm
-  only:
-    - schedules
+#  only:
+#    - schedules
 
   tags:
     - docker
