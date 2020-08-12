@@ -4,6 +4,7 @@ stages:
   - build
   - to_docker
   - to_vm
+  - deploy
 
 Build:
   services:
@@ -48,16 +49,6 @@ Deploy to Docker:
       sudo docker pull  $CI_REGISTRY_IMAGE;
       sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
       
-deploy_prod:
-  stage: deploy
-  script:
-    - echo "Deploy to production server"
-  environment:
-    name: production
-    url: https://example.com
-  when: manual
-  only:
-    - master
 
 Deploy to VM:
   artifacts:
@@ -90,3 +81,14 @@ Deploy to VM:
     name: staging     
     # Exposes a button that when clicked take you to the defined URL:
     url: http://$STAGING_SERVER:8080/ 
+
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+    - master
