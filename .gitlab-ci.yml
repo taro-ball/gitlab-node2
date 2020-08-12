@@ -47,14 +47,25 @@ Deploy to Docker:
       sudo docker rm my_app;
       sudo docker pull  $CI_REGISTRY_IMAGE;
       sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+      
+deploy_prod:
+  stage: deploy
+  script:
+    - echo "Deploy to production server"
+  environment:
+    name: production
+    url: https://example.com
+  when: manual
+  only:
+    - master
 
 Deploy to VM:
   artifacts:
     paths:
       - ./
   stage: to_vm
-#  only:
-#    - schedules
+  only:
+    - schedules
 
   tags:
     - docker
