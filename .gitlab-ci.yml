@@ -57,6 +57,7 @@ Deploy to Docker:
   tags:
     - docker
   before_script:
+    - mkdir -p ~/.ssh
     - eval `ssh-agent` && echo "$SSH_PRIVATE_KEY" | base64 -d | ssh-add 2>&1 || true
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script: 
