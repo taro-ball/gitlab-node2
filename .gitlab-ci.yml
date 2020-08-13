@@ -5,7 +5,7 @@ stages:
   - test
   - deploy
 
-Build:
+Build_and_Push:
   services:
   - docker:dind
   stage: build
@@ -28,14 +28,14 @@ Build:
     - docker push $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
-deploy:
+Spin_Test_Environment:
   stage: test
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
-      aws ec2 run-instances --image-id ami-0ded330691a314693 --count 1 \
-      --instance-type t2.micro --key-name myec22 \
-      --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313 \
+      aws ec2 run-instances --image-id ami-0ded330691a314693 --count 1
+      --instance-type t2.micro --key-name myec22
+      --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
 
 Deploy to Docker:
