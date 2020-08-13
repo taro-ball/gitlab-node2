@@ -57,7 +57,7 @@ Deploy to Docker:
   tags:
     - docker
   before_script:
-    - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
+    - echo "$SSH_PRIVATE_KEY" | base64 --decode | ssh-add
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script: 
     - ls -la 
