@@ -81,7 +81,7 @@ Deploy to VM:
       - ./
   stage: deploy
   only:
-    - schedules
+    - manual
 
   tags:
     - docker
