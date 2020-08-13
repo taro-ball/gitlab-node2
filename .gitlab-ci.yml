@@ -40,6 +40,14 @@ Spin_Test_Environment:
       --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
 
+Setup_Environment:
+  stage: test
+  when: manual
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script:
+    - >
+      ssh blah
+
 Deploy to Docker:
   stage: deploy
   only:
@@ -49,9 +57,7 @@ Deploy to Docker:
   tags:
     - docker
   before_script:
-    - mkdir -p ~/.ssh
-    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-    - chmod 600  ~/.ssh/id_rsa
+    - ssh-add <(echo "$SSH_PRIVATE_KEY" | base64 --decode)
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
   script: 
     - ls -la 
