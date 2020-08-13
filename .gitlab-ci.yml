@@ -10,8 +10,8 @@ Build_and_Push:
   - docker:dind
   stage: build
   only:
-#    - schedules
-    - master
+    - schedules
+#    - master
   tags:
     - docker
 
@@ -95,6 +95,7 @@ deploy_prod:
   stage: deploy
   script:
     - echo "Deploy to production server"
+    - export
   environment:
     name: production
     url: https://example.com
