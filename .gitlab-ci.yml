@@ -2,8 +2,7 @@ image: docker:latest
 
 stages:
   - build
-  - to_docker
-  - to_vm
+  - test
   - deploy
 
 Build:
@@ -29,10 +28,20 @@ Build:
     - docker push $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
+deploy:
+  stage: test
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
+  script:
+    - >
+      aws ec2 run-instances --image-id ami-0ded330691a314693 --count 1 \
+      --instance-type t2.micro --key-name myec22 \
+      --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313 \
+      --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
+
 Deploy to Docker:
-  stage: to_docker
+  stage: deploy
   only:
-    - master
+    - schedules
   tags:
     - docker
   before_script:
@@ -54,7 +63,7 @@ Deploy to VM:
   artifacts:
     paths:
       - ./
-  stage: to_vm
+  stage: deploy
   only:
     - schedules
 
