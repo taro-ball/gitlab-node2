@@ -43,7 +43,9 @@ Spin_Test_Environment:
 Deploy to Docker:
   stage: deploy
   only:
-    - schedules
+    - master
+#    - schedules
+  when: on_success
   tags:
     - docker
   before_script:
