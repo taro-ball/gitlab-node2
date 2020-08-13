@@ -10,8 +10,9 @@ Build_and_Push:
   - docker:dind
   stage: build
   only:
-    - schedules
-#    - master
+    changes:
+      - Dockerfile
+      - app/*
   tags:
     - docker
 
@@ -30,6 +31,7 @@ Build_and_Push:
 
 Spin_Test_Environment:
   stage: test
+  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
