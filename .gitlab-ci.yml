@@ -69,8 +69,8 @@ Deploy to Docker:
       ssh ec2-user@$STAGING_SERVER "
       sudo docker stop my_app;
       sudo docker rm my_app;
-      sudo docker pull  $CI_REGISTRY_IMAGE;
-      sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+      sudo docker pull  $CI_REGISTRY_IMAGE"
+    - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
       
 
 Deploy to VM:
