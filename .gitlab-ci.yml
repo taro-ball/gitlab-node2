@@ -58,7 +58,9 @@ Deploy to Docker:
     - docker
   before_script: 
     - mkdir -p ~/.ssh
-    - echo -e "$SSH_PRIVATE_KEY"| base64 -d > ~/.ssh/id_rsa
+    - echo -e "$SSH_PRIVATE_KEY1"
+    - echo -e "$SSH_PRIVATE_KEY1"| base64 -d
+    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
     # Sets the permission to 600 to prevent a problem with AWS
     # that it's too unprotected.
     - chmod 600  ~/.ssh/id_rsa
