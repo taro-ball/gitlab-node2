@@ -6,8 +6,8 @@ var app = express();
 const port = process.env.JSPORT || "3000";
 const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello World!</h1> '
 const butt= " <br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a></body></html>"
-system_info= [{"hostname":os.hostname(),"type":os.type()}]
-
+system_obj = [{"hostname":os.hostname(),"OS type":os.type()}]
+system_info = system_obj.stringify()
 server = http.createServer(app).listen(port);
 var host = server.address().address;
 
