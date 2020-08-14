@@ -39,6 +39,8 @@ Spin_Test_Environment:
       --instance-type t2.micro --key-name myec22
       --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
+      --instance-initiated-shutdown-behavior terminate
+      --user-data sudo shutdown -h now \| at now + 5 minutes 
 
 Setup_Environment:
   stage: test
