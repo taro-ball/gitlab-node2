@@ -40,15 +40,17 @@ Spin_Test_Environment:
       --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
       --instance-initiated-shutdown-behavior terminate
-      --user-data file://deploy/test_ec2.sh
+      --user-data file://deploy/test_ec2.sh > ec2_deploy_output.json
 #      --user-data "sudo sh -c \"echo shutdown -h now | at now + 5 minutes\"; echo `date` > /tmp/01mydate.txt"
+    - EC2_ID=`grep -Po 'InstanceId":\s"\K([^"]*)' ec2_deploy_output.json`
     - >
-      aws ec2 describe-instances \
-      --filters \
-      "Name=instance-state-name,Values=running" \
-      "Name=instance-id,Values=i-04888cb189e29f3b0" \
-      --query 'Reservations[*].Instances[*].[PublicIpAddress]' \
-      --output text
+      EC2_IP=`
+      aws ec2 describe-instances 
+      --filters "Name=instance-state-name,Values=running" 
+      "Name=instance-id,Values=$EC2_ID" 
+      --query 'Reservations[*].Instances[*].[PublicIpAddress]' 
+      --output text`
+    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
       
 Setup_Environment:
   stage: test
