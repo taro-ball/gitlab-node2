@@ -50,7 +50,7 @@ Spin_Test_Environment:
       "Name=instance-id,Values=$EC2_ID" 
       --query 'Reservations[*].Instances[*].[PublicIpAddress]' 
       --output text`
-    - sudo yum -y install openssh-clients || sudo apt -y install ssh
+    - sudo yum -y install openssh-clients || sudo apt-get -y install openssh-client
     - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
       
 Setup_Environment:
