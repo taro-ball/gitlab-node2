@@ -40,7 +40,7 @@ Spin_Test_Environment:
       --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
       --instance-initiated-shutdown-behavior terminate
-      --user-data "echo `date` > /tmp/01mydate.txt"
+      --user-data file://deploy/test_ec2.sh
 #      --user-data "sudo sh -c \"echo shutdown -h now | at now + 5 minutes\"; echo `date` > /tmp/01mydate.txt"
 
 Setup_Environment:
