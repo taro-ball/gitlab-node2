@@ -56,7 +56,11 @@ Spin_Test_Environment:
 Deploy_to_Test_Environment:
   stage: test
   when: manual
-  script: source my_vars.sh && printenv | grep EC2 
+  script: 
+  - cat my_vars.sh
+  - chmod +x my_vars.sh
+  - source my_vars.sh
+  - printenv | grep EC2 
 
 Setup_Environment:
   stage: test
