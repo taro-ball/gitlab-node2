@@ -38,7 +38,7 @@ Build_and_Push:
 
 Spin_Test_Environment:
   stage: test
-  when: manual
+#  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
@@ -50,7 +50,7 @@ Spin_Test_Environment:
       --user-data file://deploy/test_ec2.sh > ec2_deploy_output.json
 #      --user-data "sudo sh -c \"echo shutdown -h now | at now + 5 minutes\"; echo `date` > /tmp/01mydate.txt"
     - EC2_ID=`grep -Po 'InstanceId":\s"\K([^"]*)' ec2_deploy_output.json` && echo $EC2_ID
-    - EC2_ID="${EC2_ID//[$'\t\r\n']}"
+    - sleep 60
     - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo $EC2_IP && echo "EC2_IP=$EC2_IP"
     - echo "EC2_IP=$EC2_IP" >> my_vars.sh
