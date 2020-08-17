@@ -63,7 +63,7 @@ Deploy_to_Test_Environment:
   - cat my_vars.sh
   - source my_vars.sh
 #  - printenv | grep EC2 
-  - echo EC2_IP
+  - echo $EC2_IP
 
 Setup_Environment:
   stage: test
