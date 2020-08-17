@@ -69,6 +69,8 @@ Spin_Test_Environment:
 
 Deploy_to_Test_Environment:
   <<: *ssh_template
+  cache:
+    key: test-vars
   stage: test
   when: manual
   script: 
