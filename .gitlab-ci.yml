@@ -70,7 +70,7 @@ Spin_Test_Environment:
 Deploy_to_Test_Environment:
   <<: *ssh_template
   stage: test
-  when: on_success
+  when: manual
   script: 
   - cat my_vars.sh
   - source my_vars.sh
