@@ -1,9 +1,5 @@
-image: docker:latest
-
-# no way to pass variables between jobs in gitlab, will use cache for that
-cache:
- paths:
-  - my_vars.sh
+default:
+  image: docker:latest
 
 stages:
   - build
@@ -18,6 +14,7 @@ stages:
     # Sets the permission to 600 to prevent a problem with AWS
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
+
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -46,8 +43,13 @@ Build_and_Push:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 
 Spin_Test_Environment:
+  # no way to pass variables between jobs in gitlab, will use cache for that
+  cache:
+   key: test-vars
+   paths:
+    - my_vars.sh  
   stage: test
-  when: manual
+#  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
@@ -66,23 +68,17 @@ Spin_Test_Environment:
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
+  <<: *ssh_template
   stage: test
-  when: manual
+  when: on_success
   script: 
   - cat my_vars.sh
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
+  - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
 
-.Setup_Environment:
-  stage: test
-  when: manual
-  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  script:
-    - >
-      ssh blah
-
-Deploy to Docker:
+.Deploy to Docker:
   <<: *ssh_template  
   stage: deploy
   only:
