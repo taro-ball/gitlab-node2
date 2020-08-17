@@ -10,6 +10,15 @@ stages:
   - test
   - deploy
 
+.ssh_template: &ssh_template
+  before_script: 
+    - mkdir -p ~/.ssh
+    # we have to store SSH key in base 64 encoding to be able to mask the variable
+    - echo -e "$SSH_PRIVATE_KEY1"| base64 -d > ~/.ssh/id_rsa
+    # Sets the permission to 600 to prevent a problem with AWS
+    - chmod 600  ~/.ssh/id_rsa
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
+
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
   services:
@@ -55,6 +64,7 @@ Spin_Test_Environment:
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
     - cat my_vars.sh
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
+
 Deploy_to_Test_Environment:
   stage: test
   when: manual
@@ -64,7 +74,7 @@ Deploy_to_Test_Environment:
 #  - printenv | grep EC2 
   - echo $EC2_IP
 
-Setup_Environment:
+.Setup_Environment:
   stage: test
   when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -73,6 +83,7 @@ Setup_Environment:
       ssh blah
 
 Deploy to Docker:
+  <<: *ssh_template  
   stage: deploy
   only:
     - master
@@ -80,13 +91,6 @@ Deploy to Docker:
   when: on_success
   tags:
     - docker
-  before_script: 
-    - mkdir -p ~/.ssh
-    # we have to store SSH key in base 64 encoding to be able to mask the variable
-    - echo -e "$SSH_PRIVATE_KEY1"| base64 -d > ~/.ssh/id_rsa
-    # Sets the permission to 600 to prevent a problem with AWS
-    - chmod 600  ~/.ssh/id_rsa
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
   script: 
     - ls -la 
     - >
@@ -111,7 +115,7 @@ Deploy to Docker:
   before_script:
     # Generates to connect to the AWS unit the SSH key.
     - mkdir -p ~/.ssh
-    - echo -e "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+    - echo -e "$SSH_PRIVATE_KEY1"| base64 -d > ~/.ssh/id_rsa
     # Sets the permission to 600 to prevent a problem with AWS
     # that it's too unprotected.
     - chmod 600  ~/.ssh/id_rsa
