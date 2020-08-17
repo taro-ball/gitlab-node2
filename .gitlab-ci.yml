@@ -71,6 +71,8 @@ Deploy_to_Test_Environment:
   <<: *ssh_template
   cache:
     key: test-vars
+    paths:
+     - my_vars.sh  
   stage: test
   when: manual
   script: 
