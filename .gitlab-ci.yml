@@ -42,7 +42,7 @@ Spin_Test_Environment:
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
-      echo aws ec2 run-instances --image-id ami-0ded330691a314693 --count 1
+      aws ec2 run-instances --image-id ami-0ded330691a314693 --count 1
       --instance-type t2.micro --key-name myec22
       --security-group-ids sg-01f96ce6a38acab33 --subnet-id subnet-752fd313
       --placement "{\"AvailabilityZone\": \"ap-southeast-2b\",\"Tenancy\": \"default\"}"
