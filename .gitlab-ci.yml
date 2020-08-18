@@ -6,7 +6,7 @@ stages:
   - test
   - deploy
 
-.ssh_template: &ssh_template
+.ssh_credentials: &ssh_credentials
   before_script: 
     - mkdir -p ~/.ssh
     # we have to store SSH key in base 64 encoding to be able to mask the variable
@@ -28,11 +28,9 @@ Build_and_Push:
       - app/*
   tags:
     - docker
-
   before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   - docker info
-
   script: 
     # inject job name:
     - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME<\/bo/g" app/app.js
@@ -48,6 +46,9 @@ Spin_Test_Environment:
    key: test-vars
    paths:
     - my_vars.sh  
+  artifacts:
+    reports:
+      dotenv: test.env
   stage: test
 #  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -64,11 +65,15 @@ Spin_Test_Environment:
     - sleep 20
     - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
+    - echo "TEST_URL=$EC2_IP:8888" > test.env
     - cat my_vars.sh
+  environment:
+    name: TEST/$CI_COMMIT_REF_SLUG
+    url: $TEST_URL
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
-  <<: *ssh_template
+  <<: *ssh_credentials
   cache:
     key: test-vars
     paths:
@@ -81,9 +86,12 @@ Deploy_to_Test_Environment:
 #  - printenv | grep EC2 
   - echo $EC2_IP
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
-
+  environment:
+    name: TEST/$CI_COMMIT_REF_SLUG
+    url: $TEST_URL
+    
 .Deploy to Docker:
-  <<: *ssh_template  
+  <<: *ssh_credentials  
   stage: deploy
   only:
     - master
@@ -108,18 +116,10 @@ Deploy_to_Test_Environment:
   stage: deploy
   only:
     - manual
-
   tags:
     - docker
-    
   before_script:
-    # Generates to connect to the AWS unit the SSH key.
-    - mkdir -p ~/.ssh
-    - echo -e "$SSH_PRIVATE_KEY1"| base64 -d > ~/.ssh/id_rsa
-    # Sets the permission to 600 to prevent a problem with AWS
-    # that it's too unprotected.
-    - chmod 600  ~/.ssh/id_rsa
-    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'   
+    <<: *ssh_credentials   
   script: 
     - ls -la
     # inject job name:
