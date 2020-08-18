@@ -33,7 +33,7 @@ Build_and_Push:
   - docker info
   script: 
     # inject job name:
-    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME $CI_COMMIT_REF_SLUG<\/bo/g" app/app.js
+    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME $CI_COMMIT_SHA<\/bo/g" app/app.js
     - docker build --pull --tag $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
 #    - docker run $CI_REGISTRY_IMAGE /script/to/run/tests
 #    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:latest
@@ -49,9 +49,6 @@ Spin_Test_Environment:
    key: test-vars
    paths:
     - my_vars.sh  
-  artifacts:
-    reports:
-      dotenv: test.env
   stage: test
 #  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
@@ -68,8 +65,7 @@ Spin_Test_Environment:
     - sleep 20
     - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
-    - echo "TEST_URL=$EC2_IP:8888" > test.env
-    - echo "app is running at $TEST_URL"
+    - echo "app will be deployed to $EC2_IP:8888"
     - cat my_vars.sh
   environment:
     name: TEST_ENV_SPIN
@@ -90,10 +86,10 @@ Deploy_to_Test_Environment:
 #  - printenv | grep EC2 
   - echo $EC2_IP
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
-  - echo "app is running at $TEST_URL"
+  - echo "app is running at $EC2_IP:8888"
   environment:
     name: TEST_env_deploy
-    url: "$TEST_URL"
+    url: "$EC2_IP:8888"
     
 .Deploy to Docker:
   <<: *ssh_credentials  
