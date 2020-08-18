@@ -39,7 +39,10 @@ Build_and_Push:
 #    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
-
+  environment:
+    name: docker_image_env
+    url: https://hub.docker.com/r/$CI_REGISTRY_IMAGE
+    
 Spin_Test_Environment:
   # no way to pass variables between jobs in gitlab, will use cache for that
   cache:
