@@ -69,10 +69,11 @@ Spin_Test_Environment:
     - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
     - echo "TEST_URL=$EC2_IP:8888" > test.env
+    - echo "app is running at $TEST_URL"
     - cat my_vars.sh
   environment:
     name: TEST_ENV_SPIN
-    url: www.google.com
+    url: "www.google.com"
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
@@ -88,8 +89,8 @@ Deploy_to_Test_Environment:
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
-  - echo $TEST_URL
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+  - echo "app is running at $TEST_URL"
   environment:
     name: TEST_env_deploy
     url: "$TEST_URL"
