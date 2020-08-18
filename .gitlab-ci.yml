@@ -72,7 +72,7 @@ Spin_Test_Environment:
     - cat my_vars.sh
   environment:
     name: TEST_ENV_spin
-    url: ap-southeast-2.compute.amazonaws.com:8888
+    url: "ap-southeast-2.compute.amazonaws.com:8888"
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
@@ -92,7 +92,7 @@ Deploy_to_Test_Environment:
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   environment:
     name: TEST_env_deploy
-    url: $TEST_URL
+    url: "$TEST_URL"
     
 .Deploy to Docker:
   <<: *ssh_credentials  
