@@ -41,7 +41,7 @@ Build_and_Push:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
   environment:
     name: docker_image_env
-    url: https://hub.docker.com/r/$CI_REGISTRY_IMAGE
+    url: $CI_REGISTRY_IMAGE
     
 Spin_Test_Environment:
   # no way to pass variables between jobs in gitlab, will use cache for that
@@ -71,8 +71,8 @@ Spin_Test_Environment:
     - echo "TEST_URL=$EC2_IP:8888" > test.env
     - cat my_vars.sh
   environment:
-    name: TEST_ENV/$CI_COMMIT_REF_SLUG
-    url: $TEST_URL
+    name: TEST_ENV_spin
+    url: ap-southeast-2.compute.amazonaws.com:8888
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
@@ -88,9 +88,10 @@ Deploy_to_Test_Environment:
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
+  - echo $TEST_URL
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   environment:
-    name: TEST/$CI_COMMIT_REF_SLUG
+    name: TEST_env_deploy
     url: $TEST_URL
     
 .Deploy to Docker:
