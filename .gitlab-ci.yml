@@ -33,7 +33,7 @@ Build_and_Push:
   - docker info
   script: 
     # inject job name:
-    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME<\/bo/g" app/app.js
+    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME $CI_COMMIT_REF_SLUG<\/bo/g" app/app.js
     - docker build --pull --tag $CI_REGISTRY_IMAGE:latest --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
 #    - docker run $CI_REGISTRY_IMAGE /script/to/run/tests
 #    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:latest
@@ -68,7 +68,7 @@ Spin_Test_Environment:
     - echo "TEST_URL=$EC2_IP:8888" > test.env
     - cat my_vars.sh
   environment:
-    name: TEST/$CI_COMMIT_REF_SLUG
+    name: TEST_ENV/$CI_COMMIT_REF_SLUG
     url: $TEST_URL
 #    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
