@@ -83,6 +83,8 @@ Deploy_and_Test:
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
+## need to wait for docker daemon to start
+  - sleep 30
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!  
