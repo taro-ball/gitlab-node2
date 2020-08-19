@@ -66,24 +66,25 @@ Spin_Test_Environment:
     - echo "app will be deployed to $EC2_IP:8888"
     - cat my_vars.sh
 
-Deploy_to_Test_Environment:
+Deploy_and_Test:
   <<: *ssh_credentials
+  image: node:14.8.0-alpine3.10
   cache:
     key: test-vars
     paths:
      - my_vars.sh  
   stage: test
   when: manual
-  script: 
+  before_script: 
+  - apk add openssh-client
+  - apk add curl
   - cat my_vars.sh
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
-  environment:
-    name: TEST_env_deploy
-    url: "$EC2_IP:8888"
+  script: curl http://$EC2_IP:8888
     
 .Deploy to Docker:
   <<: *ssh_credentials  
