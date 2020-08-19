@@ -29,7 +29,7 @@ Build_and_Push:
   tags:
     - docker
   before_script:
-  - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+# - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   - docker info
   script: 
     # inject job name:
@@ -68,10 +68,6 @@ Spin_Test_Environment:
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
     - echo "app will be deployed to $EC2_IP:8888"
     - cat my_vars.sh
-  environment:
-    name: TEST_ENV_SPIN
-    url: "www.google.com"
-#    - ssh ec2-user@$EC2_IP "curl http://169.254.169.254/latest/meta-data/public-ipv4"
 
 Deploy_to_Test_Environment:
   <<: *ssh_credentials

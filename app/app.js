@@ -5,7 +5,7 @@ var app = express();
 
 const port = process.env.JSPORT || "3000";
 const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello World!</h1> '
-const butt= " <br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a></body></html>"
+const butt= " <br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a><br><a href='/api/system'>try System api</a></body></html>"
 system_obj = [{"hostname":os.hostname(),"OS type":os.type()}]
 system_info = JSON.stringify(system_obj)
 server = http.createServer(app).listen(port);
@@ -30,7 +30,9 @@ app.get('/error', function (req, res) {
 app.get('/api/cpus', (req, res) => {
   return res.send(os.cpus());
 });
-
+app.get('/api/system', (req, res) => {
+  return res.send(system_obj);
+});
 
 console.log(system_info);
 console.log('Example app listening at http://%s:%s', host, port);
