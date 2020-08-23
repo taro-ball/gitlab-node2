@@ -5,7 +5,7 @@ stages:
   - build
   - deploy_test
   - test
-  - deploy
+  - deploy_uat
 
 .ssh_credentials: &ssh_credentials
   before_script: 
@@ -31,7 +31,7 @@ Build_and_Push:
     - docker
   before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  - docker info
+  #- docker info
   script: 
     # inject job name:
     - sed -i "s/<\/bo/<br>deployed by $CI_JOB_NAME $CI_COMMIT_SHA <\/bo/g" app/app.js
@@ -61,6 +61,7 @@ Spin_Test_Environment:
       --user-data file://deploy/test_ec2.sh > ec2_deploy_output.json
     - EC2_ID=`grep -Po 'InstanceId":\s"\K([^"]*)' ec2_deploy_output.json` && echo $EC2_ID
 #    - EC2_ID=i-04888cb189e29f3b0
+    ## wait till public IP is assigned
     - sleep 20
     - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
@@ -83,7 +84,7 @@ Deploy_and_Test:
   - source my_vars.sh
 #  - printenv | grep EC2 
   - echo $EC2_IP
-## need to wait for docker daemon to start
+## wait for docker daemon to start
   - sleep 30
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
@@ -91,9 +92,9 @@ Deploy_and_Test:
   - echo "http://$EC2_IP:8888"
   - curl "http://$EC2_IP:8888"
     
-.Deploy to Docker:
+Deploy to UAT:
   <<: *ssh_credentials  
-  stage: deploy
+  stage: deploy_uat
   only:
     - master
 #    - schedules
