@@ -148,5 +148,5 @@ Deploy to UAT:
   only:
     - master
 
-  include:
+include:
   - template: Dependency-Scanning.gitlab-ci.yml
