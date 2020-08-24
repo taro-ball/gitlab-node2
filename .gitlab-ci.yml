@@ -150,3 +150,4 @@ Deploy to UAT:
 
 include:
   - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
