@@ -147,3 +147,6 @@ Deploy to UAT:
   when: manual
   only:
     - master
+
+  include:
+  - template: Dependency-Scanning.gitlab-ci.yml
