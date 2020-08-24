@@ -63,7 +63,7 @@ Spin_Test_Environment:
 #    - EC2_ID=i-04888cb189e29f3b0
     ## wait till public IP is assigned
     - EC2_IP=""
-    - while [ -z "$EC2_IP" ]; do EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text` ;echo $EC2_IP `date`; sleep 2; done;
+    - while [ -z "$EC2_IP" ]; do EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text` ;echo `date` $EC2_IP ; sleep 2; done;
 #    - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
     - echo "app will be deployed to $EC2_IP:8888"
@@ -71,7 +71,7 @@ Spin_Test_Environment:
 
 Deploy_and_Test:
   <<: *ssh_credentials
-  image: node:14.8.0-alpine3.10
+  image: postman/newman:5.1.2-alpine
   cache:
     key: test-vars
     paths:
@@ -86,7 +86,8 @@ Deploy_and_Test:
 #  - printenv | grep EC2 
   - echo $EC2_IP
 ## wait for docker daemon to start
-  - sleep 30
+  - docker_status=""
+  - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP sudo service docker status | grep running` ;echo `date` $docker_status; sleep 2; done;
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!
