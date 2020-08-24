@@ -1,0 +1,107 @@
+{
+	"info": {
+		"_postman_id": "fcec3061-9e0b-4610-a51a-f92be5170e2c",
+		"name": "node_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Homepage",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "8b47db89-e99b-46ef-8e3d-cbef8378f616",
+						"exec": [
+							"\r",
+							"pm.test('Home page contains \"Hello\"', function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Hello\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test-env-base-url}}",
+					"host": [
+						"{{test-env-base-url}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Lazers Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "74ca64e8-aaac-4d08-96a8-f6ec1ed2de19",
+						"exec": [
+							"pm.test('error contains \"lazers\"', function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"lazers\");\r",
+							"});\r",
+							"\r",
+							"pm.test('error returns 500', function() {\r",
+							"    pm.expect(pm.response.code).to.eql(500);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test-env-base-url}}/error",
+					"host": [
+						"{{test-env-base-url}}"
+					],
+					"path": [
+						"error"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "JSON API",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "5432944e-e322-45b9-80c0-33af6afa7e66",
+						"exec": [
+							"pm.test(\"run on linux\", () => {\r",
+							"  const responseJson = pm.response.json();\r",
+							"  pm.expect(responseJson[0][\"OS type\"]).to.eql(\"Linux\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{test-env-base-url}}/api/system",
+					"host": [
+						"{{test-env-base-url}}"
+					],
+					"path": [
+						"api",
+						"system"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
