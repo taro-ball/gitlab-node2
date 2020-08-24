@@ -71,7 +71,7 @@ Spin_Test_Environment:
 
 Deploy_and_Test:
   <<: *ssh_credentials
-  image: postman/newman:5.1.2-alpine
+  image: node:14.8.0-alpine3.10
   cache:
     key: test-vars
     paths:
@@ -91,7 +91,8 @@ Deploy_and_Test:
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!
-  - cd integration-test; ./test.sh
+  - cd integration-test; npm install -g newman; ./test.sh
+  - newman run postman_test1.json -e postman_environment.json
   - echo "http://$EC2_IP:8888"
   - curl "http://$EC2_IP:8888"
     
