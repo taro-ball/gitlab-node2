@@ -97,6 +97,7 @@ Deploy to UAT:
   stage: deploy_uat
   only:
     - master
+    - manual
 #    - schedules
   when: on_success
   tags:
