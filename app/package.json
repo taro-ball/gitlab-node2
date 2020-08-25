@@ -4,12 +4,16 @@
   "description": "my testing node app",
   "main": "app.js",
   "scripts": {
-    "start": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
+     "test": "mocha",
+     "start": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
   },
   "author": "PG",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
     "forever": "^3.0.0"
+  },
+  "devDependencies": {
+    "mocha": "^8.1.1"
   }
 }
