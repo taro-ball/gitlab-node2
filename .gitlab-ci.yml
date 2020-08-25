@@ -73,7 +73,7 @@ Integration_Testing:
   <<: *ssh_credentials
   artifacts:
     paths:
-      - ./newman/
+      - ./newman/*.html
   image: 
     name: postman/newman:5.1.2-alpine
     entrypoint: [""]
