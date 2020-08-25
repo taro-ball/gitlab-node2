@@ -99,7 +99,7 @@ Integration_Testing:
 ## run the tests!
   #- npm install -g newman
   - npm install -g newman-reporter-htmlextra
-  - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json -r htmlextra
+  - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json -r htmlextra,cli
   - ls -la; ls -la integration-test
   - echo "test successful against http://$EC2_IP:8888"
   #- curl "http://$EC2_IP:8888"
