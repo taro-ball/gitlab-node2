@@ -69,8 +69,11 @@ Spin_Test_Environment:
     - echo "app will be deployed to $EC2_IP:8888"
     - cat my_vars.sh
 
-Deploy_and_Test:
+Integration_Testing:
   <<: *ssh_credentials
+  artifacts:
+    paths:
+      - ./newman/
   image: 
     name: postman/newman:5.1.2-alpine
     entrypoint: [""]
@@ -94,7 +97,9 @@ Deploy_and_Test:
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!
   #- npm install -g newman
-  - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json
+  - npm install -g newman-reporter-htmlextra
+  - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json -r htmlextra
+  - ls -la; ls -la integration-test
   - echo "test successful against http://$EC2_IP:8888"
   #- curl "http://$EC2_IP:8888"
     
