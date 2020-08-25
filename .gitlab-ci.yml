@@ -82,7 +82,7 @@ Deploy_and_Test:
 #  when: manual
   script:
   - apk add openssh-client
-  - apk add curl
+  # - apk add curl
   - cat my_vars.sh
   - source my_vars.sh
 #  - printenv | grep EC2 
@@ -106,10 +106,9 @@ Deploy to UAT:
     - manual
 #    - schedules
 #  when: on_success
-  tags:
-    - docker
   script: 
     - ls -la 
+    # delete the running container & pull the latest image
     - >
       ssh ec2-user@$STAGING_SERVER "
       sudo docker stop my_app;
