@@ -75,6 +75,7 @@ Integration_Testing:
     when: always
     paths:
       - ./newman/*.html
+  needs: ["Spin_Test_Environment"]
   image: 
     name: postman/newman:5.1.2-alpine
     entrypoint: [""]
