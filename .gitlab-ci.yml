@@ -116,9 +116,8 @@ Deploy to UAT:
   stage: deploy_uat
   only:
     - master
-    - manual
 #    - schedules
-#  when: on_success
+  when: manual
   script: 
     - ls -la 
     # delete the running container & pull the latest image
