@@ -87,7 +87,7 @@ Deploy_and_Test:
   - echo $EC2_IP
 ## wait for docker daemon to start
   - docker_status=""
-  - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP sudo service docker status 2>&1 | grep running 2>&1` ;echo `date` $docker_status; sleep 2; done;
+  - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP "( sudo service docker status || true ) | grep running || true"` ;echo `date` $docker_status; sleep 2; done;
   - ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!
