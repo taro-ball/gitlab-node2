@@ -3,7 +3,6 @@ default:
 
 stages:
   - build
-  - deploy_test
   - test
   - deploy_uat
 
@@ -48,7 +47,7 @@ Spin_Test_Environment:
    key: test-vars
    paths:
     - my_vars.sh  
-  stage: deploy_test
+  stage: test
 #  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
