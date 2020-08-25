@@ -2,7 +2,7 @@ var express = require('express');
 var http = require('http')
 //var os = require('os')
 var app = express();
-const sysinfo = require('../sysinfo');
+const sysinfo = require('./sysinfo');
 
 
 const port = process.env.JSPORT || "3000";

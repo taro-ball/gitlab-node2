@@ -4,8 +4,8 @@
   "description": "my testing node app",
   "main": "app.js",
   "scripts": {
-     "test": "mocha",
-     "start": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
+    "test": "mocha",
+    "start": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
   },
   "author": "PG",
   "license": "ISC",
