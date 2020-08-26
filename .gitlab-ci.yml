@@ -82,6 +82,8 @@ Spin_Test_Environment:
 
 Integration_Testing:
   <<: *ssh_credentials
+  dependencies:
+    - Build_and_Push
   artifacts:
     when: always
     paths:
