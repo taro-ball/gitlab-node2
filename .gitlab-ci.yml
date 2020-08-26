@@ -19,6 +19,10 @@ stages:
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
+  artifacts:
+    when: always
+    paths:
+      - ./build_success
   services:
   - docker:dind
   stage: build
@@ -35,7 +39,8 @@ Build_and_Push:
   script: 
     # inject job name:
     - sed -i "s/<\/bo/<br>deployed by $CI_JOB_NAME $CI_COMMIT_SHA <\/bo/g" app/app.js
-    - docker build --pull --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA .
+    - docker build --pull --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA . > build_success
+    - cat build_success
 #    - docker run $CI_REGISTRY_IMAGE /script/to/run/tests
 #    - docker tag $CI_REGISTRY_IMAGE $CI_REGISTRY_IMAGE:latest
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
@@ -104,7 +109,7 @@ Integration_Testing:
   - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP "( sudo service docker status || true ) | grep running || true"` ;echo `date` $docker_status; sleep 2; done;
 ## deploy app to TEST $CI_COMMIT_SHA  2>&1 | grep "not found"
   - > 
-    if [ "$BUILD_SUCCESSFUL" ]; then
+    if [ -f "build_success" ]; then
         echo "We have a build, lets deploy it";
         ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1" 
     else
