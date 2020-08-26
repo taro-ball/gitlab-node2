@@ -93,7 +93,7 @@ Integration_Testing:
 #  when: manual
   script:
   - apk add openssh-client
-  - apk add curl
+  - apk add grep
   # - apk add curl
   - cat my_vars.sh
   - source my_vars.sh
