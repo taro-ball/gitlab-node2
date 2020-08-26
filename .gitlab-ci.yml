@@ -79,16 +79,14 @@ Spin_Test_Environment:
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
     - echo "app will be deployed to $EC2_IP:8888"
     - cat my_vars.sh
+    - ls -la
 
 Integration_Testing:
   <<: *ssh_credentials
-  dependencies:
-    - Build_and_Push
   artifacts:
     when: always
     paths:
       - ./newman/*.html
-  needs: ["Spin_Test_Environment"]
   image: 
     name: postman/newman:5.1.2-alpine
     entrypoint: [""]
