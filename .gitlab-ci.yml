@@ -103,9 +103,14 @@ Integration_Testing:
   - docker_status=""
   - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP "( sudo service docker status || true ) | grep running || true"` ;echo `date` $docker_status; sleep 2; done;
 ## deploy app to TEST $CI_COMMIT_SHA  2>&1 | grep "not found"
-  - >
-    ssh ec2-user@$EC2_IP "( sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1 | grep 'not found' ) 
-    || sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+  - > 
+    if [ "$BUILD_SUCCESSFUL" ]; then
+        echo "We have a build, lets deploy it";
+        ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1" 
+    else
+        echo "No build, deploying :latest";
+        sh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:latest"
+    fi
   - echo "app is running at http://$EC2_IP:8888"
 ## run the tests!
   #- npm install -g newman
