@@ -46,11 +46,11 @@ Build_and_Push:
     - docker push $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
     - > 
       if [ "$CI_COMMIT_BRANCH" == "master" ]; then
-          echo "Master branch, tagging with 'latest'";
+          echo -e "Master branch, tagging with 'latest'\n==========\n";
           docker tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA $CI_REGISTRY_IMAGE:latest;
           docker push $CI_REGISTRY_IMAGE:latest
       else
-          echo "Not a master branch ($CI_COMMIT_BRANCH), only tagging with commit SHA"
+          echo -e "Not a master branch ($CI_COMMIT_BRANCH), only tagging with commit SHA\n==========\n"
       fi
   
 Spin_Test_Environment:
@@ -110,19 +110,19 @@ Integration_Testing:
 ## deploy app to TEST $CI_COMMIT_SHA  2>&1 | grep "not found"
   - > 
     if [ -f "build_success" ]; then
-        echo "We have a build, lets deploy it";
+        echo -e "We have a build, lets deploy it\n==========\n";
         ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1";
     else
-        echo "No build, deploying :latest";
+        echo -e "No build, deploying :latest\n==========\n";
         ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:latest"
     fi
-  - echo "app is running at http://$EC2_IP:8888"
+  - echo -e "app is running at http://$EC2_IP:8888\n==========\n"
 ## run the tests!
   #- npm install -g newman
   - npm install -g newman-reporter-htmlextra
   - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json -r htmlextra,cli
   - ls -la; ls -la integration-test
-  - echo "test successful against http://$EC2_IP:8888"
+  - echo -e "test successful against http://$EC2_IP:8888\n==========\n"
   #- curl "http://$EC2_IP:8888"
     
 Deploy to UAT:
@@ -180,5 +180,6 @@ Deploy to UAT:
     - master
 
 include:
-  - template: Dependency-Scanning.gitlab-ci.yml
-  - template: Security/License-Scanning.gitlab-ci.yml
+  - template: Code-Quality.gitlab-ci.yml
+#  - template: Dependency-Scanning.gitlab-ci.yml
+#  - template: Security/License-Scanning.gitlab-ci.yml
