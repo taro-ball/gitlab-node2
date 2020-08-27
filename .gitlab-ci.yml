@@ -1,6 +1,10 @@
 default:
   image: docker:latest
 
+variables:
+  APP_NAME: "my_app"
+  APP_PORT: "8888"
+
 stages:
   - build
   - deploy_test
@@ -77,7 +81,7 @@ Spin_Test_Environment:
     - while [ -z "$EC2_IP" ]; do EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text` ;echo `date` $EC2_IP ; sleep 2; done;
 #    - EC2_IP=`aws ec2 describe-instances --filters "Name=instance-state-name,Values=running" "Name=instance-id,Values=$EC2_ID" --query 'Reservations[*].Instances[*].[PublicIpAddress]' --output text`
     - echo "EC2_IP=$EC2_IP" > my_vars.sh
-    - echo "app will be deployed to $EC2_IP:8888"
+    - echo "app will be deployed to $EC2_IP:$APP_PORT"
     - cat my_vars.sh
     - ls -la
 
@@ -111,19 +115,21 @@ Integration_Testing:
   - > 
     if [ -f "build_success" ]; then
         echo -e "We have a build, lets deploy it\n==========\n";
-        ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1";
+        ssh ec2-user@$EC2_IP "sudo docker run -d -p $APP_PORT:3000 --name $APP_NAME $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA 2>&1";
     else
         echo -e "No build, deploying :latest\n==========\n";
-        ssh ec2-user@$EC2_IP "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE:latest"
+        ssh ec2-user@$EC2_IP "sudo docker run -d -p $APP_PORT:3000 --name $APP_NAME $CI_REGISTRY_IMAGE:latest"
     fi
-  - echo -e "app is running at http://$EC2_IP:8888\n==========\n"
+  - echo -e "app is running at http://$EC2_IP:$APP_PORT\n==========\n"
 ## run the tests!
   #- npm install -g newman
   - npm install -g newman-reporter-htmlextra
-  - newman run --global-var "test-env-base-url=http://$EC2_IP:8888" integration-test/postman_test1.json -r htmlextra,cli
+  - newman run --global-var "test-env-base-url=http://$EC2_IP:$APP_PORT" integration-test/postman_test1.json -r htmlextra,cli
   - ls -la; ls -la integration-test
-  - echo -e "test successful against http://$EC2_IP:8888\n==========\n"
-  #- curl "http://$EC2_IP:8888"
+  - echo -e "test successful against http://$EC2_IP:$APP_PORT\n==========\n"
+  # check container logs
+  - ssh ec2-user@$EC2_IP "sudo docker log $APP_NAME" || true
+  #- curl "http://$EC2_IP:$APP_PORT"
     
 Deploy to UAT:
   <<: *ssh_credentials  
@@ -140,7 +146,7 @@ Deploy to UAT:
       sudo docker stop my_app;
       sudo docker rm my_app;
       sudo docker pull  $CI_REGISTRY_IMAGE"
-    - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p 8888:3000 --name my_app $CI_REGISTRY_IMAGE"
+    - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p $APP_PORT:3000 --name my_app $CI_REGISTRY_IMAGE"
       
 
 .Deploy to VM:
