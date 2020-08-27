@@ -4,11 +4,6 @@ var http = require('http')
 var app = express();
 const sysinfo = require('./sysinfo');
 
-//bad stuff
-var badvar = 888
-get223 = (a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z) => [{"hostname":os.hostname(),"OS type":os.type()}];
-//end bad
-
 const port = process.env.JSPORT || "3000";
 const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello World!</h1> '
 const butt= "Another merge test!..<br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a><br><a href='/api/system'>try System api</a></body></html>"
