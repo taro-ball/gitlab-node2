@@ -27,9 +27,14 @@ ES_Lint:
   only:
     changes:
       - app/*  
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - app/node_modules/  
   script:
+    - cd app
     - npm ci
-    - npx eslint --format gitlab ./app
+    - npx eslint --format gitlab .
   artifacts:
     reports:
       codequality: gl-codequality.json
