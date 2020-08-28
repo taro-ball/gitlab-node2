@@ -13,7 +13,7 @@ var system_info = JSON.stringify(system_obj) +JSON.stringify(sysinfo.resources()
 var server = http.createServer(app).listen(port);
 var host = server.address().address;
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   var currentDate = new Date();
   var user_agent = req.get('user-agent')
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
