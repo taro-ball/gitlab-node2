@@ -8,16 +8,16 @@ const port = process.env.JSPORT || "3000";
 const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello World!</h1> '
 const butt= "Another merge test!..<br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a><br><a href='/api/system'>try System api</a></body></html>"
 //system_obj = [{"hostname":os.hostname(),"OS type":os.type()}]
-system_obj = sysinfo.get()
-system_info = JSON.stringify(system_obj) +JSON.stringify(sysinfo.resources());
-server = http.createServer(app).listen(port);
+var system_obj = sysinfo.get()
+var system_info = JSON.stringify(system_obj) +JSON.stringify(sysinfo.resources());
+var server = http.createServer(app).listen(port);
 var host = server.address().address;
 
 app.get('/', function (req, res) {
-  currentDate = new Date();
-  user_agent = req.get('user-agent')
-  ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-  content = `${currentDate} <br> ${ip} - ${user_agent}<br> `
+  var currentDate = new Date();
+  var user_agent = req.get('user-agent')
+  var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+  var content = `${currentDate} <br> ${ip} - ${user_agent}<br> `
   res.status(200).send(`${head} ${content} <h2>${system_info}</h2> ${butt}`);
   console.log(`${currentDate} - ${ip} - ${user_agent}`)
 });
