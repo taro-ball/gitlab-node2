@@ -22,6 +22,7 @@ stages:
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
 
 ES_Lint:
+  stage: lint
   image: node:14.8.0-alpine
   only:
     changes:
