@@ -6,6 +6,7 @@ variables:
   APP_PORT: "8888"
 
 stages:
+  - lint
   - build
   - deploy_test
   - test
@@ -20,6 +21,17 @@ stages:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
 
+ES_Lint:
+  image: node:14.8.0-alpine
+  only:
+    changes:
+      - app/*  
+  script:
+    - npm ci
+    - npx eslint --format gitlab ./app
+  artifacts:
+    reports:
+      codequality: gl-codequality.json
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -185,7 +197,7 @@ Deploy to UAT:
   only:
     - master
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
+# include:
+#  - template: Code-Quality.gitlab-ci.yml
 #  - template: Dependency-Scanning.gitlab-ci.yml
 #  - template: Security/License-Scanning.gitlab-ci.yml
