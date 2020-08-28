@@ -22,8 +22,9 @@ app.get('/', function (req, res) {
   console.log(`${currentDate} - ${ip} - ${user_agent}`)
 });
 
-app.get('/error', function (req, res) {
+app.get('/error', (req, res) => {
   var err = new Error('lazers offline');
+  res.send("Test error follows:");
   throw err
   //try {throw err;}
   //catch (e) {console.log("=====cought======="+e)}
