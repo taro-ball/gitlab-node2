@@ -35,7 +35,8 @@ ES_Lint:
     - cd app
     - npm ci
     - npx eslint --format gitlab .
-    - pwd; cd; pwd
+    - pwd; cd .. ; pwd
+    - echo $CI_BUILDS_DIR
     - cat gl-codequality.json
   artifacts:
     reports:
