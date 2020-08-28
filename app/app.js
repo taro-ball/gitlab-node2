@@ -30,8 +30,9 @@ app.get('/error', function (req, res) {
 });
 
 app.get('/api/cpus', (req, res) => {
-  return res.send(os.cpus());
+  return res.send(sysinfo.cpus());
 });
+
 app.get('/api/system', (req, res) => {
   return res.send(system_obj);
 });
