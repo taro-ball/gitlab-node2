@@ -34,13 +34,14 @@ ES_Lint:
   script:
     - cd app
     - npm ci
-    - npx eslint --format gitlab .
+#    - npx eslint --format gitlab .
+    - npx eslint .
     - pwd; cd .. ; pwd
     - echo $CI_BUILDS_DIR
     - cat gl-codequality.json
-  artifacts:
-    reports:
-      codequality: gl-codequality.json
+#  artifacts:
+#    reports:
+#      codequality: gl-codequality.json
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -133,6 +134,7 @@ Integration_Testing:
   - docker_status=""
   - while [ -z "$docker_status" ]; do docker_status=`ssh ec2-user@$EC2_IP "( sudo service docker status || true ) | grep running || true"` ;echo `date` $docker_status; sleep 2; done;
 ## deploy app to TEST $CI_COMMIT_SHA  2>&1 | grep "not found"
+  - ssh ec2-user@$EC2_IP "sudo docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY"
   - > 
     if [ -f "build_success" ]; then
         echo -e "We have a build, lets deploy it\n==========\n";
@@ -206,7 +208,7 @@ Deploy to UAT:
   only:
     - master
 
-# include:
-#  - template: Code-Quality.gitlab-ci.yml
-#  - template: Dependency-Scanning.gitlab-ci.yml
-#  - template: Security/License-Scanning.gitlab-ci.yml
+include:
+  - template: Code-Quality.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: Security/License-Scanning.gitlab-ci.yml
