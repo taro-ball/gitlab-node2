@@ -35,7 +35,7 @@ app.get('/api/system', (req, res) => {
 });
 
 app.get('/randomSTUFF', (req, res) => {
-  return res.send(x: 123);
+  return res.send(123);
 });
 
 console.log(system_info);
