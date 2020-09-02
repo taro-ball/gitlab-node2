@@ -38,7 +38,7 @@ ES_Lint:
     - npx eslint .
     - pwd; cd .. ; pwd
     - echo $CI_BUILDS_DIR
-    - cat gl-codequality.json
+#    - cat gl-codequality.json
 #  artifacts:
 #    reports:
 #      codequality: gl-codequality.json
