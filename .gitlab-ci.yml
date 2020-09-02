@@ -152,6 +152,7 @@ Integration_Testing:
   - echo -e "test successful against http://$EC2_IP:$APP_PORT\n==========\n"
   after_script:
   # check container logs
+  - source my_vars.sh
   - ssh ec2-user@$EC2_IP "sudo docker log $APP_NAME" || true
   #- curl "http://$EC2_IP:$APP_PORT"
     
