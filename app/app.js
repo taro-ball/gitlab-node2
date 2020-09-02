@@ -23,11 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/error', (req, res) => {
-  var err = new Error('lazers offline');
-  res.send("Test error follows:");
-  throw err
-  //try {throw err;}
-  //catch (e) {console.log("=====cought======="+e)}
+  throw new Error('lazers offline');
 });
 
 app.get('/api/cpus', (req, res) => {
@@ -36,6 +32,10 @@ app.get('/api/cpus', (req, res) => {
 
 app.get('/api/system', (req, res) => {
   return res.send(system_obj);
+});
+
+app.get('/randomSTUFF', (req, res) => {
+  return res.send(x: 123);
 });
 
 console.log(system_info);
