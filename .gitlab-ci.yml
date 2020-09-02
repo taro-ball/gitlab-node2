@@ -6,7 +6,7 @@ variables:
   APP_PORT: "8888"
 
 stages:
-  - lint
+#  - lint
   - build
   - deploy_test
   - test
@@ -21,27 +21,6 @@ stages:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
 
-ES_Lint:
-  stage: lint
-  image: node:14.8.0-alpine
-  only:
-    changes:
-      - app/*  
-  cache: 
-    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
-    paths:
-      - app/node_modules/  
-  script:
-    - cd app
-    - npm ci
-#    - npx eslint --format gitlab .
-    - npx eslint .
-    - pwd; cd .. ; pwd
-    - echo $CI_BUILDS_DIR
-#    - cat gl-codequality.json
-#  artifacts:
-#    reports:
-#      codequality: gl-codequality.json
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -173,6 +152,27 @@ Deploy to UAT:
       sudo docker pull  $CI_REGISTRY_IMAGE"
     - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p $APP_PORT:3000 --name my_app $CI_REGISTRY_IMAGE"
       
+.ES_Lint:
+  stage: lint
+  image: node:14.8.0-alpine
+  only:
+    changes:
+      - app/*  
+  cache: 
+    key: $CI_COMMIT_REF_SLUG-$CI_PROJECT_DIR
+    paths:
+      - app/node_modules/  
+  script:
+    - cd app
+    - npm ci
+#    - npx eslint --format gitlab .
+    - npx eslint .
+    - pwd; cd .. ; pwd
+    - echo $CI_BUILDS_DIR
+#    - cat gl-codequality.json
+#  artifacts:
+#    reports:
+#      codequality: gl-codequality.json
 
 .Deploy to VM:
   artifacts:

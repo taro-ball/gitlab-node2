@@ -1,1 +1,5 @@
-Just a new test project
+## Pipeline stages:
+  - build
+  - deploy_test
+  - test
+  - deploy_uat
