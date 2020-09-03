@@ -173,6 +173,7 @@ Deploy to UAT:
 #  artifacts:
 #    reports:
 #      codequality: gl-codequality.json
+# some stuff
 
 .Deploy to VM:
   artifacts:
