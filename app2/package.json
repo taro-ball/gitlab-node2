@@ -7,7 +7,8 @@
      "license": "MIT",
      "scripts": {
           "test": "npx mocha --require babel-register tests/*.js --exit",
-          "dev": "npx nodemon --exec npx babel-node --presets babel-preset-env ./server.js"
+          "dev": "PORT=8000 npx nodemon --exec npx babel-node --presets babel-preset-env ./server.js",
+          "start": "PORT=3000 npx babel-node --presets babel-preset-env ./server.js"
      },
      "dependencies": {
           "body-parser": "^1.18.3",
