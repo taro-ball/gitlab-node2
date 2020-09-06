@@ -3,4 +3,5 @@ import StudentController from '../controllers/studentController.js';
 const routes = Router();
 routes.get('/api', StudentController.getAllStudents);
 routes.get('/api/:id', StudentController.getSingleStudent);
+routes.get('/error', StudentController.throwLazersError);
 export default routes;
