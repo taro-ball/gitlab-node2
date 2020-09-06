@@ -42,8 +42,6 @@ Build_and_Push:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   #- docker info
   script: 
-    # inject job name:
-    - sed -i "s/<\/bo/<br>deployed by $CI_JOB_NAME $CI_COMMIT_SHA <\/bo/g" app/app.js
     - docker build --pull --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA . > build_success
     - cat build_success
 #    - docker run $CI_REGISTRY_IMAGE /script/to/run/tests

@@ -1,21 +1,25 @@
 {
-  "name": "node-test2",
-  "version": "1.0.0",
-  "description": "my testing node app",
-  "main": "app.js",
-  "scripts": {
-    "test": "mocha",
-    "start": " NODE_ENV='staging'  forever restart ./app.js || NODE_ENV='staging' forever start ./app.js"
-  },
-  "author": "PG",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.17.1",
-    "forever": "^3.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^7.7.0",
-    "eslint-formatter-gitlab": "^2.0.0",
-    "mocha": "^8.1.1"
-  }
+     "name": "student-record",
+     "version": "1.0.0",
+     "description": "An API to manage student record",
+     "main": "server.js",
+     "author": "Rob Zombie",
+     "license": "MIT",
+     "scripts": {
+          "test": "npx mocha --require babel-register tests/*.js --exit",
+          "dev": "PORT=8000 npx nodemon --exec npx babel-node --presets babel-preset-env ./server.js",
+          "start": "PORT=3000 npx babel-node --presets babel-preset-env ./server.js"
+     },
+     "dependencies": {
+          "body-parser": "^1.18.3",
+          "express": "^4.17.1"
+     },
+     "devDependencies": {
+          "babel-cli": "^6.26.0",
+          "babel-preset-env": "^1.7.0",
+          "chai": "^4.1.2",
+          "chai-http": "^4.0.0",
+          "mocha": "^8.1.3",
+          "nodemon": "^2.0.4"
+     }
 }
