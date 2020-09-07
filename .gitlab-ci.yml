@@ -9,7 +9,7 @@ stages:
   - unit_test
   - build
   - deploy_test
-  - integration_test
+  - test
   - deploy_uat
 
 .ssh_credentials: &ssh_credentials
@@ -105,7 +105,7 @@ Integration_Testing:
     key: test-vars
     paths:
      - my_vars.sh  
-  stage: integration_test
+  stage: test
 #  when: manual
   script:
   - apk add openssh-client
@@ -217,7 +217,7 @@ Deploy to UAT:
   only:
     - master
 
-include:
-  - template: Code-Quality.gitlab-ci.yml
-  - template: Dependency-Scanning.gitlab-ci.yml
+#include:
+#  - template: Code-Quality.gitlab-ci.yml
+# - template: Dependency-Scanning.gitlab-ci.yml
 #  - template: Security/License-Scanning.gitlab-ci.yml
