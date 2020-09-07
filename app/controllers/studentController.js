@@ -30,9 +30,7 @@ class StudentController {
       static BuildInfo(req, res) {
             fs.readFile("build.info", "utf8", function (err, contents) {
                   console.log(contents);
-                  res.writeHead(200, { 'Content-Type': 'text/plain' });
-                  res.write(contents);
-                  res.end();
+                  return res.send(contents);
             });
 
       }
