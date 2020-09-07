@@ -13,6 +13,7 @@ describe("Students", () => {
                  .get('/api')
                  .end((err, res) => {
                      res.should.have.status(200);
+                     res.should.have.status(333);
                      res.body.should.be.a('object');
                      done();
                   });
