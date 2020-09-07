@@ -28,6 +28,9 @@
 					"raw": "{{test-env-base-url}}/api",
 					"host": [
 						"{{test-env-base-url}}"
+					],
+					"path": [
+						"api"
 					]
 				}
 			},
