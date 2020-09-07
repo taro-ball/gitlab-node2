@@ -29,6 +29,9 @@ Run_Unit_Tests:
   script: 
     - cd app; npm install
     - npm test
+  artifacts:
+    reports:
+      junit: ./test-results.xml
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
