@@ -49,6 +49,9 @@ Build_and_Push:
     changes:
       - Dockerfile
       - app/*
+      - app/controllers/*
+      - app/dummy/*
+      - app/routes/*
   tags:
     - docker
   before_script:
