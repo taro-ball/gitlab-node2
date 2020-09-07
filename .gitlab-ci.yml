@@ -30,9 +30,10 @@ Run_Unit_Tests:
     - cd app; npm install
     - npm test
     - cat test-results.xml
+    - pwd; ls -la
   artifacts:
     reports:
-      junit: test-results.xml
+      junit: app/test-results.xml
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -75,7 +76,7 @@ Spin_Test_Environment:
    paths:
     - my_vars.sh  
   stage: deploy_test
-#  when: manual
+  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
@@ -99,7 +100,7 @@ Spin_Test_Environment:
 Integration_Testing:
   <<: *ssh_credentials
   artifacts:
-    when: always
+    when: manual
     paths:
       - ./newman/*.html
   image: 
