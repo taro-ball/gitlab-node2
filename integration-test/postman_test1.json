@@ -79,9 +79,11 @@
 					"script": {
 						"id": "5432944e-e322-45b9-80c0-33af6afa7e66",
 						"exec": [
-							"pm.test(\"first studnt is Sean Grey\", () => {\r",
-							"  const responseJson = pm.response.json();\r",
-							"  pm.expect(responseJson.student.name.to.eql(\"Sean Grey\");",
+							"pm.test('Name contains \"Sean\"', function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"Sean\");\r",
+							"});\r",
+							"pm.test('request returns 200', function() {\r",
+							"    pm.expect(pm.response.code).to.eql(200);\r",
 							"});"
 						],
 						"type": "text/javascript"
