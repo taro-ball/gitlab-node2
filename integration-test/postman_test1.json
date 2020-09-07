@@ -13,9 +13,8 @@
 					"script": {
 						"id": "8b47db89-e99b-46ef-8e3d-cbef8378f616",
 						"exec": [
-							"\r",
-							"pm.test('Home page contains \"Hello\"', function() {\r",
-							"    pm.expect(pm.response.text()).to.include(\"Hello\");\r",
+							"pm.test('Home page contains \"All the students\"', function() {\r",
+							"    pm.expect(pm.response.text()).to.include(\"All the students\");\r",
 							"});"
 						],
 						"type": "text/javascript"
@@ -26,7 +25,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{test-env-base-url}}",
+					"raw": "{{test-env-base-url}}/api",
 					"host": [
 						"{{test-env-base-url}}"
 					]
@@ -77,9 +76,9 @@
 					"script": {
 						"id": "5432944e-e322-45b9-80c0-33af6afa7e66",
 						"exec": [
-							"pm.test(\"run on linux\", () => {\r",
+							"pm.test(\"first studnt is Sean Grey\", () => {\r",
 							"  const responseJson = pm.response.json();\r",
-							"  pm.expect(responseJson[0][\"OS type\"]).to.eql(\"Linux\");\r",
+							"  pm.expect(responseJson.student.name.to.eql(\"Sean Grey\");",
 							"});"
 						],
 						"type": "text/javascript"
@@ -90,13 +89,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "{{test-env-base-url}}/api/system",
+					"raw": "{{test-env-base-url}}/api/1",
 					"host": [
 						"{{test-env-base-url}}"
 					],
 					"path": [
 						"api",
-						"system"
+						"1"
 					]
 				}
 			},
