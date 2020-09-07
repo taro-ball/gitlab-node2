@@ -6,7 +6,7 @@
      "author": "Rob Zombie",
      "license": "MIT",
      "scripts": {
-          "test": "npx mocha --require babel-register tests/*.js --exit",
+          "test": "npx mocha --require babel-register tests/*.js --reporter mocha-junit-reporter --exit",
           "dev": "PORT=8000 npx nodemon --exec npx babel-node --presets babel-preset-env ./server.js",
           "start": "PORT=3000 npx babel-node --presets babel-preset-env ./server.js"
      },
@@ -20,6 +20,7 @@
           "chai": "^4.1.2",
           "chai-http": "^4.0.0",
           "mocha": "^8.1.3",
+          "mocha-junit-reporter": "^2.0.0",
           "nodemon": "^2.0.4"
      }
 }

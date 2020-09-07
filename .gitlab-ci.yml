@@ -29,6 +29,7 @@ Run_Unit_Tests:
   script: 
     - cd app; npm install
     - npm test
+    - cat test-results.xml
   artifacts:
     reports:
       junit: ./test-results.xml
