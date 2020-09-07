@@ -100,7 +100,6 @@ Spin_Test_Environment:
 Integration_Testing:
   <<: *ssh_credentials
   artifacts:
-    when: manual
     paths:
       - ./newman/*.html
   image: 
@@ -111,7 +110,7 @@ Integration_Testing:
     paths:
      - my_vars.sh  
   stage: test
-#  when: manual
+  when: on_success
   script:
   - apk add openssh-client
   - apk add grep
