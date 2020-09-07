@@ -1,4 +1,5 @@
 import students from '../dummy/students.js';
+import fs from 'fs';
 class StudentController {
       // Get all students
       static getAllStudents(req, res) {
@@ -25,5 +26,16 @@ class StudentController {
       static throwLazersError(req, res) {
             throw new Error('lazers offline');
       }
+
+      static BuildInfo(req, res) {
+            fs.readFile("build.info", "utf8", function (err, contents) {
+                  console.log(contents);
+                  res.writeHead(200, { 'Content-Type': 'text/plain' });
+                  res.write(contents);
+                  res.end();
+            });
+
+      }
+
 }
 export default StudentController;

@@ -56,6 +56,11 @@ Build_and_Push:
     - docker
   before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
+  - COMMIT_BASE_URL="$CI_PROJECT_URL/node2/-/commits/"
+  - echo $COMMIT_BASE_URL$CI_COMMIT_SHA > app/build.info
+  - echo message - $CI_COMMIT_MESSAGE >> app/build.info
+  - echo branch - $CI_COMMIT_REF_NAME >> app/build.info
+
   #- docker info
   script: 
     - docker build --pull --tag $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA . > build_success
