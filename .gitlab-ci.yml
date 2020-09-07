@@ -6,10 +6,10 @@ variables:
   APP_PORT: "8888"
 
 stages:
-#  - lint
+  - unit_test
   - build
   - deploy_test
-  - test
+  - integration_test
   - deploy_uat
 
 .ssh_credentials: &ssh_credentials
@@ -21,6 +21,14 @@ stages:
     - chmod 600  ~/.ssh/id_rsa
     - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'  
 
+Run_Unit_Tests:
+  image: 
+    name: postman/newman:5.1.2-alpine
+    entrypoint: [""]
+  stage: unit_test
+  script: 
+    - cd app; npm install
+    - npm test
 
 Build_and_Push:
 # need to use a (dind: Docker IN Docker) service to build image inide a container
@@ -97,7 +105,7 @@ Integration_Testing:
     key: test-vars
     paths:
      - my_vars.sh  
-  stage: test
+  stage: integration_test
 #  when: manual
   script:
   - apk add openssh-client
