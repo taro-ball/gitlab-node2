@@ -9,7 +9,7 @@ I commented out the manual linting job as .eslintrc.yml messes up with the built
 ## jUnit tests
 - Make sure your reports are in jUnit format:
 `mocha tests/*.js --reporter mocha-junit-reporter`
-- See artifact configuration in the *Run_Unit_Tests* job
+- See jUnit report artifact configuration in the *Run_Unit_Tests* job
 
 ## Metrics
 For Docker metrics can use the following tutorials:  
