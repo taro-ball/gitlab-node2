@@ -174,7 +174,7 @@ Deploy to UAT:
     - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p $APP_PORT:3000 --name my_app $CI_REGISTRY_IMAGE"
   environment:
     name: UAT
-    url: http://staging.ftp.sh:8888/
+    url: http://staging.ftp.sh:8888/bi
 
       
 .ES_Lint:

@@ -1,7 +1,7 @@
 # CI/CD notes
 
 ## Postman integration testing
-Using  newman image to reduce the build time, had to override the entry point though
+Using  newman image to reduce the build time, had to override the entry point to get access to bash though
 
 ## Code quality/Linting
 I commented out the manual linting job as .eslintrc.yml messes up with the built-in code quality job
