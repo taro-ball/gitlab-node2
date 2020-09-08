@@ -166,10 +166,15 @@ Deploy to UAT:
     # delete the running container & pull the latest image
     - >
       ssh ec2-user@$STAGING_SERVER "
+      sudo service docker start;
       sudo docker stop my_app;
       sudo docker rm my_app;
       sudo docker pull  $CI_REGISTRY_IMAGE"
     - ssh ec2-user@$STAGING_SERVER "sudo docker run -d -p $APP_PORT:3000 --name my_app $CI_REGISTRY_IMAGE"
+  environment:
+    name: UAT
+    url: http://staging.ftp.sh:8888/
+
       
 .ES_Lint:
   stage: lint
@@ -194,41 +199,6 @@ Deploy to UAT:
 #      codequality: gl-codequality.json
 # some stuff
 
-.Deploy to VM:
-  artifacts:
-    paths:
-      - ./
-  stage: deploy
-  only:
-    - manual
-  tags:
-    - docker
-  before_script:
-    <<: *ssh_credentials   
-  script: 
-    - ls -la
-    # inject job name:
-    - sed -i "s/<\/bo/<br>deployd by $CI_JOB_NAME<\/bo/g" app/app.js
-    - ssh ec2-user@$STAGING_SERVER "mkdir staging/_tmp && ls -la"
-    - scp -r ./app/* ec2-user@$STAGING_SERVER:staging/_tmp
-    - ssh ec2-user@$STAGING_SERVER "mv staging/live staging/_old && mv staging/_tmp staging/live"
-    - ssh ec2-user@$STAGING_SERVER "rm -rf staging/_old  && cd staging/live && npm install && npm start"
-  environment:     
-    name: staging     
-    # Exposes a button that when clicked take you to the defined URL:
-    url: http://$STAGING_SERVER:8080/ 
-
-.deploy_prod:
-  stage: deploy
-  script:
-    - echo "Deploy to production server"
-    - export
-  environment:
-    name: production
-    url: https://example.com
-  when: manual
-  only:
-    - master
 
 #include:
 #  - template: Code-Quality.gitlab-ci.yml
