@@ -10,6 +10,6 @@ panel_groups:
           precision: 0
         metrics:
           - id: my_metric_id
-            query_range: 'rate(go_memstats_alloc_bytes[5m])'
-            label: "Instance: {{instance}}, method: {{method}}"
+            query_range: 'go_memstats_alloc_bytes'
+            label: "Instance: {{instance}}, job: {{job}}"
             unit: "count"
