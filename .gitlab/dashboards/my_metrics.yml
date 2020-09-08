@@ -1,9 +1,9 @@
 dashboard: 'MY Dashboard test'
 panel_groups:
-  - group: 'Group Title'
+  - group: 'My System Metrics'
     panels:
       - type: area-chart
-        title: "Chart Title"
+        title: "go allocated memory bytes"
         y_label: "Y-Axis"
         y_axis:
           format: number
@@ -11,5 +11,16 @@ panel_groups:
         metrics:
           - id: my_metric_id
             query_range: 'go_memstats_alloc_bytes'
+            label: "Instance: {{instance}}, job: {{job}}"
+            unit: "count"
+      - type: area-chart
+        title: "go heap idle, bytes"
+        y_label: "Y-Axis"
+        y_axis:
+          format: number
+          precision: 0
+        metrics:
+          - id: my_metric_id2
+            query_range: 'go_memstats_heap_idle_bytes'
             label: "Instance: {{instance}}, job: {{job}}"
             unit: "count"
