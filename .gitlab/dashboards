@@ -1,0 +1,15 @@
+dashboard: 'MY Dashboard test'
+panel_groups:
+  - group: 'Group Title'
+    panels:
+      - type: area-chart
+        title: "Chart Title"
+        y_label: "Y-Axis"
+        y_axis:
+          format: number
+          precision: 0
+        metrics:
+          - id: my_metric_id
+            query_range: 'rate(go_memstats_alloc_bytes[5m])'
+            label: "Instance: {{instance}}, method: {{method}}"
+            unit: "count"
