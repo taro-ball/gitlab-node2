@@ -1,5 +1,6 @@
 import students from '../dummy/students.js';
 import fs from 'fs';
+
 class StudentController {
       // Get all students
       static getAllStudents(req, res) {
@@ -28,11 +29,16 @@ class StudentController {
       }
 
       static BuildInfo(req, res) {
-            fs.readFile("build.info", "utf8", function (err, contents) {
-                  console.log(contents);
-                  var biobj = JSON.parse(contents);
-                  return res.json(biobj);
-            });
+
+            res.header("Content-Type", 'application/json');
+            //using express way ;)
+            res.sendFile('build.info', { root: '.' });
+
+            // fs.readFile("build.info", "utf8", function (err, contents) {
+            //       console.log(contents);
+            //       var biobj = JSON.parse(contents);
+            //      return res.json(biobj);
+            // });
 
       }
 
