@@ -151,7 +151,7 @@ Integration_Testing:
   after_script:
   # check container logs
   - source my_vars.sh
-  - ssh ec2-user@$EC2_IP "sudo docker logs $APP_NAME" || true
+  - ssh ec2-user@$EC2_IP "curl localhost:$APP_PORT/bi; sudo docker logs $APP_NAME" || true
   #- curl "http://$EC2_IP:$APP_PORT"
     
 Deploy to UAT:
