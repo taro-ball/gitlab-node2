@@ -30,7 +30,8 @@ class StudentController {
       static BuildInfo(req, res) {
             fs.readFile("build.info", "utf8", function (err, contents) {
                   console.log(contents);
-                  return res.json(contents);
+                  var biobj = JSON.parse(contents);
+                  return res.json(biobj);
             });
 
       }
