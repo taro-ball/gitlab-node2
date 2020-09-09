@@ -57,7 +57,9 @@ Build_and_Push:
   before_script:
   - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
   - COMMIT_BASE_URL="$CI_PROJECT_URL/-/commit/"
-  - echo -e "{\"commitURL\":\"$COMMIT_BASE_URL$CI_COMMIT_SHA\",\n\"commitMSG\":\"$CI_COMMIT_MESSAGE\",\n\"branch\":\"$CI_COMMIT_REF_NAME\"}" > app/build.info
+  - info="{\"commitURL\":\"$COMMIT_BASE_URL$CI_COMMIT_SHA\",\"commitMSG\":\"$CI_COMMIT_MESSAGE\",\"branch\":\"$CI_COMMIT_REF_NAME\"}"
+  - echo $info
+  - echo $info > app/build.info
   - cat app/build.info
 
   #- docker info
