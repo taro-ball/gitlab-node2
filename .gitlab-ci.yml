@@ -87,10 +87,7 @@ Spin_Test_Environment:
     - my_vars.sh  
   stage: deploy_test
 #  when: manual
-#  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
-  image: python:3.8.5-slim
-  before_script:
-    - pip install awsebcli --upgrade
+  image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
     - >
       ec2 run-instances --image-id ami-0ded330691a314693 --count 1
