@@ -19,7 +19,7 @@ class StudentController {
                   });
             }
             return res.status(404).json({
-                  message: "Student record not found",
+                  message: "Student record not found!",
             });
       }
 
