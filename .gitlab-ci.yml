@@ -80,7 +80,7 @@ Build_and_Push:
       fi
   
 Spin_Test_Environment:
-  # no way to pass variables between jobs in gitlab, will use cache for that
+  # using cache to pass IP variable
   cache:
    key: test-vars
    paths:
