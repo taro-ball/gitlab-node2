@@ -110,6 +110,7 @@ Spin_Test_Environment:
 Integration_Testing:
   <<: *ssh_credentials
   artifacts:
+    when: always
     paths:
       - ./newman/*.html
   image: 
