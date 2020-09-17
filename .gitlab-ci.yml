@@ -8,8 +8,8 @@ variables:
 stages:
   - unit_test
   - build
+  - deploy_test
   - test
-  - run_test
   - deploy_uat
 
 .ssh_credentials: &ssh_credentials
@@ -85,7 +85,7 @@ Spin_Test_Environment:
    key: test-vars
    paths:
     - my_vars.sh  
-  stage: test
+  stage: deploy_test
 #  when: manual
   image: registry.gitlab.com/gitlab-org/cloud-deploy/aws-base:latest
   script:
@@ -120,7 +120,7 @@ Integration_Testing:
     key: test-vars
     paths:
      - my_vars.sh  
-  stage: run_test
+  stage: test
   when: on_success
   script:
   - apk add openssh-client
