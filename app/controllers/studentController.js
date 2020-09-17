@@ -2,6 +2,12 @@ import students from '../dummy/students.js';
 import fs from 'fs';
 
 class StudentController {
+
+      static welcome(req, res) {
+            return res.status(200).json({
+                  message: "Welcome humans! 你好！Добро пожаловать!",
+            });
+      }
       // Get all students
       static getAllStudents(req, res) {
             return res.status(200).json({
