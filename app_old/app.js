@@ -1,15 +1,16 @@
-var express = require('express');
+
 var http = require('http')
-//var os = require('os')
-var app = express();
-const sysinfo = require('./sysinfo');
+var os = require('os')
+var express = require('express');
+
+var system_obj = [{"hostname":os.hostname(),"OS type":os.type()}];
+var system_info = JSON.stringify(system_obj) + [{"free mem":os.freemem(),"load avg":os.loadavg()}];
 
 const port = process.env.JSPORT || "3000";
 const head='<html><body bgcolor="#222530" text="#22CC22"><style>body { font-family: Arial, Helvetica, sans-serif; font-size: x-large;}</style><h1>Здравствуйте!你好！ Hello World!</h1> '
-const butt= "Another merge test!..<br><a href='/error'>try error</a><br><a href='/api/cpus'>try CPU api</a><br><a href='/api/system'>try System api</a></body></html>"
-//system_obj = [{"hostname":os.hostname(),"OS type":os.type()}]
-var system_obj = sysinfo.get()
-var system_info = JSON.stringify(system_obj) +JSON.stringify(sysinfo.resources());
+const butt= "Another merge test!..<br><a href='/error'>try error</a><br><a href='/api/system'>try System api</a></body></html>"
+
+var app = express();
 var server = http.createServer(app).listen(port);
 var host = server.address().address;
 
@@ -26,16 +27,8 @@ app.get('/error', (req, res) => {
   throw new Error('lazers offline');
 });
 
-app.get('/api/cpus', (req, res) => {
-  return res.send(sysinfo.cpus());
-});
-
 app.get('/api/system', (req, res) => {
-  return res.send(system_obj);
-});
-
-app.get('/randomSTUFF', (req, res) => {
-  return res.send(123);
+  return res.status(200).send(system_obj);
 });
 
 console.log(system_info);
