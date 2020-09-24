@@ -16,7 +16,7 @@ var server = http.createServer(app).listen(port);
 var host = server.address().address;
 
 app.get('/', (req, res) => {
-  var currentDate = new Date();
+  var currentDate = new Date().toISOString();
   var user_agent = req.get('user-agent')
   var ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
   var url = req.url;
@@ -26,14 +26,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/error', (req, res) => {
-  var currentDate = new Date();
+  var currentDate = new Date().toISOString();
   var url = req.url;
   console.log(`${currentDate} - ${url}`)
   throw new Error('lazers offline');
 });
 
 app.get('/api', (req, res) => {
-  var currentDate = new Date();
+  var currentDate = new Date().toISOString();
   var url = req.url;
   console.log(`${currentDate} - ${url}`)
   return res.status(200).send(system_obj);
