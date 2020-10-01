@@ -14,6 +14,7 @@ const butt= "Another merge test!..<br><a href='/error'>try error</a><br><a href=
 var app = express();
 var server = http.createServer(app).listen(port);
 var host = server.address().address;
+module.exports = server;
 
 app.get('/', (req, res) => {
   var currentDate = new Date().toISOString();
